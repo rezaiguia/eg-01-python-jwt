@@ -1,3 +1,4 @@
+from __future__ import print_function
 import time
 
 from ds_config import DSConfig
@@ -70,5 +71,5 @@ class ExampleBase:
             if acct['account_id'] == target:
                 return acct
 
-        raise Exception(f"\n\nUser does not have access to account {target}\n\n")
+        raise Exception("\n\nUser does not have access to account {}\n\n".format(target))
 

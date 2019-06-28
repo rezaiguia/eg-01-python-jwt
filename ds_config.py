@@ -34,7 +34,7 @@ class DSConfig:
                     config_parser.read_file(itertools.chain(['[global]'], fp), source=ini_file)
                 self.config = config_parser['global']
             else:
-                raise Exception(f"Missing config file |{ini_file}| and environment variables are not set.")
+                raise Exception("Missing config file |{}| and environment variables are not set.".format(ini_file))
 
     def _auth_server(self):
         return self.config['DS_AUTH_SERVER']
@@ -105,7 +105,7 @@ class DSConfig:
 
         if 'https://' in auth_server:
             aud = auth_server[8:]
-        else: # assuming http://blah
+        else:  # assuming http://blah
             aud = auth_server[7:]
 
         return aud

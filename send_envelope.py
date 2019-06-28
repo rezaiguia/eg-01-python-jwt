@@ -4,7 +4,6 @@ import base64
 from os import path
 from docusign_esign import EnvelopesApi, EnvelopeDefinition, Signer, CarbonCopy, SignHere, Tabs, Recipients, Document
 from ds_config import DSConfig
-from ds_helper import DSHelper
 from example_base import ExampleBase
 
 demo_docs_path = path.abspath(path.join(path.dirname(path.realpath(__file__)), 'data'))
@@ -41,7 +40,7 @@ class SendEnvelope(ExampleBase):
             email_subject='Please sign this document set'
         )
         doc1_b64 = base64.b64encode(
-            bytes(self.create_document1(args), 'utf-8')).decode('ascii')
+            bytes(self.create_document1(args))).decode('ascii')
         # read files 2 and 3 from a local directory
         # The reads could raise an exception if the file is not available!
         with open(path.join(demo_docs_path, DOC_2_DOCX),
@@ -124,7 +123,7 @@ class SendEnvelope(ExampleBase):
     def create_document1(self, args):
         """ Creates document 1 -- an html document"""
 
-        return f"""
+        return """
         <!DOCTYPE html>
         <html>
             <head>
@@ -136,9 +135,9 @@ class SendEnvelope(ExampleBase):
             <h2 style="font-family: 'Trebuchet MS', Helvetica, sans-serif;
               margin-top: 0px;margin-bottom: 3.5em;font-size: 1em;
               color: darkblue;">Order Processing Division</h2>
-            <h4>Ordered by {args['signer_name']}</h4>
-            <p style="margin-top:0em; margin-bottom:0em;">Email: {args['signer_email']}</p>
-            <p style="margin-top:0em; margin-bottom:0em;">Copy to: {args['cc_name']}, {args['cc_email']}</p>
+            <h4>Ordered by {}</h4>
+            <p style="margin-top:0em; margin-bottom:0em;">Email: {}</p>
+            <p style="margin-top:0em; margin-bottom:0em;">Copy to: {}, {}</p>
             <p style="margin-top:3em;">
       Candy bonbon pastry jujubes lollipop wafer biscuit biscuit. Topping brownie sesame snaps sweet roll pie. Croissant danish biscuit soufflé caramels jujubes jelly. Dragée danish caramels lemon drops dragée. Gummi bears cupcake biscuit tiramisu sugar plum pastry. Dragée gummies applicake pudding liquorice. Donut jujubes oat cake jelly-o. Dessert bear claw chocolate cake gummies lollipop sugar plum ice cream gummies cheesecake.
             </p>
@@ -146,4 +145,4 @@ class SendEnvelope(ExampleBase):
             <h3 style="margin-top:3em;">Agreed: <span style="color:white;">**signature_1**/</span></h3>
             </body>
         </html>
-      """
+      """.format(args['signer_name'], args['signer_email'], args['cc_name'], args['cc_email'])

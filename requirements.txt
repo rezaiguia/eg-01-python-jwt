@@ -1,0 +1,2 @@
+docusign-esign>=1.0.0,<2.0.0
+configparser>=3.7.4

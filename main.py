@@ -13,17 +13,17 @@ def main():
     try:
         print("\nSending an envelope...")
         result = SendEnvelope(api_client).send_envelope()
-        print(f"Envelope status: {result.status}. Envelope ID: {result.envelope_id}")
+        print("Envelope status: {}. Envelope ID: {}".format(result.status, result.envelope_id))
 
         print("\nList envelopes in the account whose status changed in the last 30 days...")
         envelopes_list = ListEnvelopes(api_client).list()
         envelopes = envelopes_list.envelopes
         num_envelopes = len(envelopes)
         if num_envelopes > 2:
-            print(f"Results for {num_envelopes} envelopes were returned. Showing the first two:\n")
+            print("Results for {} envelopes were returned. Showing the first two:\n".format(num_envelopes))
             envelopes_list.envelopes = [envelopes[0], envelopes[1]]
         else:
-            print(f"Results for {num_envelopes} envelopes were returned:\n")
+            print("Results for {} envelopes were returned:\n".format(num_envelopes))
 
         DSHelper.print_pretty_json(envelopes_list)
     except docusign.rest.ApiException as err:
@@ -33,19 +33,19 @@ def main():
         body = err.body.decode('utf8')
         if "consent_required" in body:
             consent_scopes = "signature%20impersonation"
-            consent_url = f"{DSConfig.auth_server()}/oauth/auth?response_type=code&scope={consent_scopes}&client_id={DSConfig.client_id()}&redirect_uri={CONSENT_REDIRECT_URL}"
-            print (f"""
+            consent_url = "{}/oauth/auth?response_type=code&scope={}&client_id={}&redirect_uri={}".format(DSConfig.auth_server(), consent_scopes, DSConfig.client_id(), CONSENT_REDIRECT_URL)
+            print ("""
 \nC O N S E N T   R E Q U I R E D
 Ask the user who will be impersonated to run the following url:
-    {consent_url}
+    {}
 
 It will ask the user to login and to approve access by your application.
 
 Alternatively, an Administrator can use Organization Administration to
-pre-approve one or more users.""")
+pre-approve one or more users.""".format(consent_url))
         else:
-            print (f"   Reason: {err.reason}")
-            print (f"   Error response: {err.body.decode('utf8')}")
+            print ("   Reason: {}".format(err.reason))
+            print ("   Error response: {}".format(err.body.decode('utf8')))
 
     print("\nDone.\n")
 
