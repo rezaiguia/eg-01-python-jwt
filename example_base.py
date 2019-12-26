@@ -29,15 +29,13 @@ class ExampleBase:
     def update_token(self):
         client = ExampleBase.api_client
 
-        private_key_file = DSHelper.create_private_key_temp_file("private-key")
-
-        print ("Requesting an access token via JWT grant...", end='')
-        client.configure_jwt_authorization_flow(private_key_file.name,
-                                                DSConfig.aud(),
-                                                DSConfig.client_id(),
-                                                DSConfig.impersonated_user_guid(), TOKEN_EXPIRATION_IN_SECONDS)
-
-        private_key_file.close()
+        print("Requesting an access token via JWT grant...", end='')
+        client.set_base_path(DSConfig.aud())
+        client.request_jwt_user_token(DSConfig.client_id(),
+                                      DSConfig.impersonated_user_guid(),
+                                      DSConfig.aud(),
+                                      DSConfig.private_key(),
+                                      TOKEN_EXPIRATION_IN_SECONDS)
 
         if ExampleBase.account is None:
             account = self.get_account_info(client)
@@ -47,7 +45,7 @@ class ExampleBase:
         client.host = ExampleBase.base_uri
         ExampleBase._token_received = True
         ExampleBase.expiresTimestamp = (int(round(time.time())) + TOKEN_EXPIRATION_IN_SECONDS)
-        print ("Done. Continuing...")
+        print("Done. Continuing...")
 
     def get_account_info(self, client):
         client.host = DSConfig.auth_server()
@@ -71,4 +69,3 @@ class ExampleBase:
                 return acct
 
         raise Exception(f"\n\nUser does not have access to account {target}\n\n")
-

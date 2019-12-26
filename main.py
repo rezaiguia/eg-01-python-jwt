@@ -26,7 +26,7 @@ def main():
             print(f"Results for {num_envelopes} envelopes were returned:\n")
 
         DSHelper.print_pretty_json(envelopes_list)
-    except docusign.rest.ApiException as err:
+    except docusign.ApiException as err:
         print ("\n\nDocuSign Exception!")
 
         # Special handling for consent_required
